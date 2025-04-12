@@ -58,7 +58,7 @@ class WeatherViewModel : ViewModel() {
                         },
                         futureDaysTemps = result.forecast?.forecastday!!.map { forecastDay ->
                             FutureDayTemps(
-                                date = { forecastDay.date!!.split("-").takeLast(2).reversed().joinToString(".") }(),
+                                date = forecastDay.date!!.split("-").takeLast(2).reversed().joinToString("."),
                                 maxTemp =  round(forecastDay.day?.mintempC!!).roundToInt().toString() + "℃",
                                 minTemp =  round(forecastDay.day?.maxtempC!!).roundToInt().toString() + "℃",
                                 icon = forecastDay.day?.condition?.icon!!
