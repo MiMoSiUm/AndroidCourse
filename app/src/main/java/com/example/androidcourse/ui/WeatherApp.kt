@@ -25,7 +25,9 @@ fun WeatherApp(modifier: Modifier = Modifier) {
                 searchWidgetState = weatherViewModel.searchWidgetState,
                 searchTextState = weatherViewModel.searchTextState,
                 onTextChange = { weatherViewModel.searchTextState = it },
-                onSearchClicked = { weatherViewModel.getWeatherData(it) },
+                onSearchClicked = {
+                    weatherViewModel.getWeatherData(it)
+                    weatherViewModel.searchWidgetState = SearchWidgetState.CLOSED },
                 onCloseClicked = { weatherViewModel.searchWidgetState = SearchWidgetState.CLOSED },
                 onSearchTriggered = { weatherViewModel.searchWidgetState = SearchWidgetState.OPENED }
             )

@@ -1,5 +1,6 @@
 package com.example.androidcourse.ui.screens
 
+import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,18 +30,23 @@ import coil3.compose.AsyncImage
 import com.example.androidcourse.data.FutureDayTemps
 import com.example.androidcourse.data.HourInfo
 import com.example.androidcourse.data.WeatherMapped
+import java.text.DateFormat
+import java.time.LocalTime
 
 @Composable
 fun HourlyTempGrid(
     hourly: List<HourInfo>,
     modifier: Modifier = Modifier
 ) {
+    val calendar = Calendar.getInstance().time
+    val currentTime = DateFormat.getTimeInstance(DateFormat.MEDIUM).format(calendar)
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(100.dp),
         modifier = modifier.requiredHeight(120.dp)
 
     ) { itemsIndexed(hourly) { _, hourInfo ->
-        HourlyTempCard(hourInfo = hourInfo)
+        if (hourInfo.time.split(":")[0] >= currentTime.split(":")[0])
+            HourlyTempCard(hourInfo = hourInfo)
     } }
 }
 

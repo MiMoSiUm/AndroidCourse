@@ -21,7 +21,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.res.stringResource
@@ -84,12 +88,14 @@ fun OpenedSearchBar(
     onSearchClicked: (String) -> Unit,
     onCloseClicked: () -> Unit
 ) {
+    val focusRequester = remember { FocusRequester() }
     TopAppBar(
         title = {},
         actions = {
             TextField(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester = focusRequester),
                 value = text,
                 onValueChange = { onTextChange(it) },
                 singleLine = true,
@@ -106,10 +112,8 @@ fun OpenedSearchBar(
                 trailingIcon = {
                     IconButton(
                         onClick = {
-                            if (text.isNotEmpty())
-                                onTextChange("")
-                            else
-                                onCloseClicked()
+                            onTextChange("")
+                            onCloseClicked()
                         }
                     ) {
                         Icon(
@@ -126,6 +130,8 @@ fun OpenedSearchBar(
                 )
             )
         }
-
     )
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 }
