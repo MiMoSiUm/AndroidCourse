@@ -3,4 +3,6 @@
     <string name="weather_forecast">Прогноз Погоды</string>
     <string name="search_icon">Search Icon</string>
     <string name="close_icon">Close Icon</string>
+    <string name="error_message">An Error Occurred</string>
+    <string name="retry_button_text">Retry</string>
 </resources>

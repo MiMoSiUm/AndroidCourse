@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.androidcourse.ui.screens.CitiesUiState
+import com.example.androidcourse.ui.screens.ErrorScreen
 import com.example.androidcourse.ui.screens.HomeScreen
+import com.example.androidcourse.ui.screens.LoadingScreen
 import com.example.androidcourse.ui.screens.MainSearchBar
 import com.example.androidcourse.ui.screens.SearchWidgetState
 import com.example.androidcourse.ui.screens.WeatherUiState
@@ -30,7 +32,7 @@ fun WeatherApp(modifier: Modifier = Modifier) {
 //                    weatherViewModel.getWeatherData(it)
 //                    weatherViewModel.searchWidgetState = SearchWidgetState.CLOSED
                     weatherViewModel.getCities(it)
-                                  },
+                },
                 onCloseClicked = { weatherViewModel.searchWidgetState = SearchWidgetState.CLOSED },
                 onSearchTriggered = { weatherViewModel.searchWidgetState = SearchWidgetState.OPENED }
             )
@@ -50,15 +52,23 @@ fun WeatherApp(modifier: Modifier = Modifier) {
                 )
             }
             is WeatherUiState.Loading -> {
-                Text(
-                    text = "Loading",
-                    modifier = modifier.padding(innerPadding)
-                )
+//                Text(
+//                    text = "Loading",
+//                    modifier = modifier.padding(innerPadding)
+//                )
+                LoadingScreen(modifier = modifier.padding(innerPadding))
             }
             is WeatherUiState.Error -> {
-                Text(
-                    text = "Error",
-                    modifier = modifier.padding(innerPadding)
+//                Text(
+//                    text = "Error",
+//                    modifier = modifier.padding(innerPadding)
+//                )
+                ErrorScreen(
+                    modifier = modifier.padding(innerPadding),
+                    retryAction = {
+                        weatherViewModel.searchWidgetState = SearchWidgetState.CLOSED
+                        weatherViewModel.getWeatherData("Izhevsk")
+                    }
                 )
             }
         }

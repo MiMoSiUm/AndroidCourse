@@ -62,6 +62,7 @@ class WeatherViewModel(
     }
 
     fun getWeatherData(city: String) {
+        weatherUiState = WeatherUiState.Loading
         viewModelScope.launch {
             weatherUiState =
             try {
@@ -77,6 +78,7 @@ class WeatherViewModel(
     }
 
     fun getCities(city: String) {
+        citiesUiState = CitiesUiState.Loading
         viewModelScope.launch {
             citiesUiState =
                 try {
