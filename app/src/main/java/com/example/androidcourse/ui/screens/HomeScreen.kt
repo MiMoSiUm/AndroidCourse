@@ -35,29 +35,40 @@ fun HomeScreen(
         modifier = modifier
             .padding(horizontal = 10.dp)
     ) {
-        Text(
-            text = weatherMapped.city,
-            modifier = Modifier
-                .weight(1f)
-                .wrapContentHeight(Alignment.CenterVertically),
-            fontSize = 70.sp,
-            fontWeight = FontWeight.Thin,
-            textAlign = TextAlign.Center
-        )
-        TodayWeatherCard(
-            currentDayInfo = weatherMapped.currentDayInfo,
-            modifier = Modifier
-                .weight(1f)
-        )
-        HourlyTempGrid(
-            weatherMapped.hourly,
-            modifier = Modifier
-                .weight(1f)
-        )
-        FutureDaysGrid(
-            weatherMapped.futureDaysTemps,
-            modifier = Modifier
-                .weight(1f)
-        )
+        weatherMapped.city?.let {
+            Text(
+                text = weatherMapped.city,
+                modifier = Modifier
+                    .weight(1f)
+                    .wrapContentHeight(Alignment.CenterVertically),
+                fontSize = 70.sp,
+                fontWeight = FontWeight.Thin,
+                textAlign = TextAlign.Center
+            )
+        }
+        weatherMapped.currentDayInfo?.let {
+            TodayWeatherCard(
+                currentDayInfo = weatherMapped.currentDayInfo,
+                modifier = Modifier
+                    .weight(1f)
+            )
+        }
+        weatherMapped.hourly?.let {
+            weatherMapped.tmrHourly?.let {
+                HourlyTempGrid(
+                    weatherMapped.hourly,
+                    weatherMapped.tmrHourly,
+                    modifier = Modifier
+                        .weight(1f)
+                )
+            }
+        }
+        weatherMapped.futureDaysTemps?.let {
+            FutureDaysGrid(
+                weatherMapped.futureDaysTemps,
+                modifier = Modifier
+                    .weight(1f)
+            )
+        }
     }
 }

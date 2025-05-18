@@ -4,6 +4,8 @@ import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,6 +21,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,18 +39,33 @@ import java.time.LocalTime
 @Composable
 fun HourlyTempGrid(
     hourly: List<HourInfo>,
+    tmrHourly: List<HourInfo>,
     modifier: Modifier = Modifier
 ) {
-    val calendar = Calendar.getInstance().time
-    val currentTime = DateFormat.getTimeInstance(DateFormat.MEDIUM).format(calendar)
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(100.dp),
         modifier = modifier.requiredHeight(120.dp)
 
-    ) { itemsIndexed(hourly) { _, hourInfo ->
-        if (hourInfo.time.split(":")[0] >= currentTime.split(":")[0])
-            HourlyTempCard(hourInfo = hourInfo)
-    } }
+    ) {
+        itemsIndexed(hourly) { _, hourInfo ->
+            hourInfo.time?.let {
+                HourlyTempCard(hourInfo = hourInfo)
+            }
+        }
+        if (tmrHourly.isNotEmpty()) {
+            itemsIndexed(listOf("dummy")) { _, dummy ->
+                VerticalDivider(
+                    thickness = 2.dp,
+                    modifier = Modifier.padding(2.dp)
+                )
+            }
+            itemsIndexed(tmrHourly) { _, hourInfo ->
+                hourInfo.time?.let {
+                    HourlyTempCard(hourInfo = hourInfo)
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -68,13 +86,15 @@ fun HourlyTempCard(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = hourInfo.temp.toString(),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .wrapContentHeight(Alignment.CenterVertically)
-            )
+            hourInfo.temp?.let {
+                Text(
+                    text = hourInfo.temp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .weight(1f)
+                        .wrapContentHeight(Alignment.CenterVertically)
+                )
+            }
             AsyncImage(
                 model = "https:" + hourInfo.icon,
                 contentDescription = "Weather Icon",
@@ -83,13 +103,15 @@ fun HourlyTempCard(
                     .weight(1f)
                     .wrapContentHeight(Alignment.CenterVertically)
             )
-            Text(
-                text = hourInfo.time,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .wrapContentHeight(Alignment.CenterVertically)
-            )
+            hourInfo.time?.let {
+                Text(
+                    text = hourInfo.time,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .weight(1f)
+                        .wrapContentHeight(Alignment.CenterVertically)
+                )
+            }
         }
     }
 }

@@ -60,12 +60,14 @@ fun FutureDayCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
-            Text(
-                text = futureDayTemps.date,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 10.dp)
-            )
+            futureDayTemps.date?.let {
+                Text(
+                    text = futureDayTemps.date,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 10.dp)
+                )
+            }
             AsyncImage(
                 model = "https:" + futureDayTemps.icon,
                 contentDescription = "Weather Icon",
@@ -82,14 +84,18 @@ fun FutureDayCard(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = futureDayTemps.maxTemp!! + "/",
-                    modifier = Modifier
-                )
-                Text(
-                    text = futureDayTemps.minTemp!!,
-                    modifier = Modifier
-                )
+                futureDayTemps.maxTemp?.let {
+                    Text(
+                        text = futureDayTemps.maxTemp + "/",
+                        modifier = Modifier
+                    )
+                }
+                futureDayTemps.minTemp?.let {
+                    Text(
+                        text = futureDayTemps.minTemp,
+                        modifier = Modifier
+                    )
+                }
             }
         }
     }

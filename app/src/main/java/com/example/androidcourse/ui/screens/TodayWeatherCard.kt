@@ -59,14 +59,16 @@ fun TodayWeatherCard(
                             .size(40.dp)
 //                            .wrapContentHeight(Alignment.CenterVertically)
                     )
-                    Text(
-                        text = currentDayInfo.currentTemp,
-                        fontSize = 40.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
+                    currentDayInfo.currentTemp?.let {
+                        Text(
+                            text = currentDayInfo.currentTemp,
+                            fontSize = 40.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
 //                            .fillMaxSize()
 //                            .wrapContentHeight(Alignment.CenterVertically)
-                    )
+                        )
+                    }
                 }
                 Column(
                     verticalArrangement = Arrangement.Center,
