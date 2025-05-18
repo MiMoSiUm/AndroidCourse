@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
@@ -46,7 +47,7 @@ fun CityCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(50.dp)
+            .height(60.dp)
             .padding(vertical = 3.dp),
         onClick = {
             onCityClicked(city.id!!) },
@@ -61,7 +62,7 @@ fun CityCard(
         )
         {
             Text(
-                text = city.name + ", " + city.country,
+                text = city.name + ", " + city.region + ", " + city.country,
                 modifier = Modifier
             )
         }
