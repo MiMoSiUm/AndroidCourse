@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.androidcourse.ui.screens.CitiesUiState
 import com.example.androidcourse.ui.screens.HomeScreen
 import com.example.androidcourse.ui.screens.MainSearchBar
 import com.example.androidcourse.ui.screens.SearchWidgetState
@@ -26,8 +27,10 @@ fun WeatherApp(modifier: Modifier = Modifier) {
                 searchTextState = weatherViewModel.searchTextState,
                 onTextChange = { weatherViewModel.searchTextState = it },
                 onSearchClicked = {
-                    weatherViewModel.getWeatherData(it)
-                    weatherViewModel.searchWidgetState = SearchWidgetState.CLOSED },
+//                    weatherViewModel.getWeatherData(it)
+//                    weatherViewModel.searchWidgetState = SearchWidgetState.CLOSED
+                    weatherViewModel.getCities(it)
+                                  },
                 onCloseClicked = { weatherViewModel.searchWidgetState = SearchWidgetState.CLOSED },
                 onSearchTriggered = { weatherViewModel.searchWidgetState = SearchWidgetState.OPENED }
             )
@@ -36,7 +39,13 @@ fun WeatherApp(modifier: Modifier = Modifier) {
         when (weatherViewModel.weatherUiState) {
             is WeatherUiState.Success -> {
                 HomeScreen(
+                    searchWidgetState = weatherViewModel.searchWidgetState,
                     weatherMapped = (weatherViewModel.weatherUiState as WeatherUiState.Success).weatherMapped,
+                    citiesUiState = weatherViewModel.citiesUiState,
+                    onCityClicked = {
+                        weatherViewModel.getWeatherData("id:$it")
+                        weatherViewModel.searchWidgetState = SearchWidgetState.CLOSED
+                    },
                     modifier = modifier.padding(innerPadding)
                 )
             }

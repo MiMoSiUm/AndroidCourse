@@ -17,6 +17,7 @@ import com.example.androidcourse.data.HourInfo
 import com.example.androidcourse.data.WeatherMapped
 import com.example.androidcourse.data.WeatherRepository
 import com.example.androidcourse.network.WeatherApi
+import com.example.androidcourse.network.model.City
 import kotlinx.coroutines.launch
 import java.io.IOException
 import kotlin.math.round
@@ -26,6 +27,12 @@ sealed interface WeatherUiState {
     data class Success(val weatherMapped: WeatherMapped) : WeatherUiState
     object Loading : WeatherUiState
     object Error : WeatherUiState
+}
+
+sealed interface CitiesUiState {
+    data class Success(val cities: List<City>) : CitiesUiState
+    object Loading : CitiesUiState
+    object Error : CitiesUiState
 }
 
 class WeatherViewModel(
@@ -43,6 +50,8 @@ class WeatherViewModel(
 
     var weatherUiState: WeatherUiState by mutableStateOf(WeatherUiState.Loading)
         private set
+
+    var citiesUiState: CitiesUiState by mutableStateOf(CitiesUiState.Loading)
 
     var searchWidgetState by mutableStateOf(SearchWidgetState.CLOSED)
 
@@ -64,6 +73,21 @@ class WeatherViewModel(
             } catch (e: retrofit2.HttpException) {
                 WeatherUiState.Error
             }
+        }
+    }
+
+    fun getCities(city: String) {
+        viewModelScope.launch {
+            citiesUiState =
+                try {
+                    CitiesUiState.Success(
+                        weatherRepository.getCities(city = city)
+                    )
+                } catch (e: IOException) {
+                    CitiesUiState.Error
+                } catch (e: retrofit2.HttpException) {
+                    CitiesUiState.Error
+                }
         }
     }
 }

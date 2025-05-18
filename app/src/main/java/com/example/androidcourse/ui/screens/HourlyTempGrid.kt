@@ -48,9 +48,7 @@ fun HourlyTempGrid(
 
     ) {
         itemsIndexed(hourly) { _, hourInfo ->
-            hourInfo.time?.let {
-                HourlyTempCard(hourInfo = hourInfo)
-            }
+            HourlyTempCard(hourInfo = hourInfo)
         }
         if (tmrHourly.isNotEmpty()) {
             itemsIndexed(listOf("dummy")) { _, dummy ->
@@ -60,9 +58,7 @@ fun HourlyTempGrid(
                 )
             }
             itemsIndexed(tmrHourly) { _, hourInfo ->
-                hourInfo.time?.let {
-                    HourlyTempCard(hourInfo = hourInfo)
-                }
+                HourlyTempCard(hourInfo = hourInfo)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.androidcourse.network
 
+import com.example.androidcourse.network.model.City
 import com.example.androidcourse.network.model.Weather
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -10,6 +11,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.weatherapi.com/v1/"
+private const val API_KEY = "72860e139b9643c3a80120932251004"
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
@@ -24,12 +26,19 @@ interface WeatherApiService {
         @Query("days")
         days: String = "5",
         @Query("key")
-        key: String = "72860e139b9643c3a80120932251004",
+        key: String = API_KEY,
         @Query("aqi")
         aqi: String = "no",
         @Query("alerts")
         alerts: String = "no",
     ): Weather
+    @GET("search.json")
+    suspend fun getCities(
+        @Query("q")
+        city: String,
+        @Query("key")
+        key: String = API_KEY
+    ) : List<City>
 }
 
 object WeatherApi {

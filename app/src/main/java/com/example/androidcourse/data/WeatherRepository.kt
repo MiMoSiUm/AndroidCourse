@@ -1,6 +1,7 @@
 package com.example.androidcourse.data
 
 import com.example.androidcourse.network.WeatherApi
+import com.example.androidcourse.network.model.City
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.transform
@@ -9,6 +10,7 @@ import kotlin.math.roundToInt
 
 interface WeatherRepository {
     suspend fun getWeather(city: String): WeatherMapped
+    suspend fun getCities(city: String) : List<City>
 }
 
 class NetworkWeatherRepository : WeatherRepository {
@@ -16,7 +18,7 @@ class NetworkWeatherRepository : WeatherRepository {
         var hourCount = 0
         val result = WeatherApi.retrofitService.getWeather(city = city)
         return WeatherMapped(
-            city = city,
+            city = result.location?.name,
             currentDayInfo = CurrentDayInfo(
                 currentTemp = result.current?.tempC?.roundToInt().toString() + "℃",
                 maxTemp = result.forecast?.forecastday[0]?.day?.maxtempC?.roundToInt().toString() + "℃",
@@ -55,5 +57,9 @@ class NetworkWeatherRepository : WeatherRepository {
                 )
             }
         )
+    }
+
+    override suspend fun getCities(city: String): List<City> {
+        return WeatherApi.retrofitService.getCities(city = city)
     }
 }
