@@ -5,7 +5,6 @@ import com.example.androidcourse.network.model.City
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.transform
-import kotlin.math.round
 import kotlin.math.roundToInt
 
 interface WeatherRepository {

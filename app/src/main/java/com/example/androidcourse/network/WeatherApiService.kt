@@ -7,7 +7,6 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.Query
 
 private const val BASE_URL = "https://api.weatherapi.com/v1/"

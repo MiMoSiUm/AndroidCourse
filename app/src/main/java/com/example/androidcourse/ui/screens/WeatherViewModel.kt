@@ -9,19 +9,12 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import coil3.network.HttpException
 import com.example.androidcourse.WeatherApplication
-import com.example.androidcourse.data.CurrentDayInfo
-import com.example.androidcourse.data.FutureDayTemps
-import com.example.androidcourse.data.HourInfo
 import com.example.androidcourse.data.WeatherMapped
 import com.example.androidcourse.data.WeatherRepository
-import com.example.androidcourse.network.WeatherApi
 import com.example.androidcourse.network.model.City
 import kotlinx.coroutines.launch
 import java.io.IOException
-import kotlin.math.round
-import kotlin.math.roundToInt
 
 sealed interface WeatherUiState {
     data class Success(val weatherMapped: WeatherMapped) : WeatherUiState
@@ -58,10 +51,10 @@ class WeatherViewModel(
     var searchTextState by mutableStateOf(value = "")
 
     init {
-        getWeatherData("Izhevsk")
+        getWeatherData()
     }
 
-    fun getWeatherData(city: String) {
+    fun getWeatherData(city: String = "auto:ip") {
         weatherUiState = WeatherUiState.Loading
         viewModelScope.launch {
             weatherUiState =
