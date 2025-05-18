@@ -17,7 +17,7 @@ import com.example.androidcourse.ui.screens.WeatherViewModel
 
 @Composable
 fun WeatherApp(modifier: Modifier = Modifier) {
-    val weatherViewModel: WeatherViewModel = viewModel()
+    val weatherViewModel: WeatherViewModel = viewModel(factory = WeatherViewModel.Factory)
 
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {

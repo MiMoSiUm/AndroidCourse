@@ -4,12 +4,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import coil3.network.HttpException
+import com.example.androidcourse.WeatherApplication
 import com.example.androidcourse.data.CurrentDayInfo
 import com.example.androidcourse.data.FutureDayTemps
 import com.example.androidcourse.data.HourInfo
 import com.example.androidcourse.data.WeatherMapped
+import com.example.androidcourse.data.WeatherRepository
 import com.example.androidcourse.network.WeatherApi
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -22,7 +28,19 @@ sealed interface WeatherUiState {
     object Error : WeatherUiState
 }
 
-class WeatherViewModel : ViewModel() {
+class WeatherViewModel(
+    private val weatherRepository: WeatherRepository
+) : ViewModel() {
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as WeatherApplication)
+                val weatherRepository = application.container.weatherRepository
+                WeatherViewModel(weatherRepository = weatherRepository)
+            }
+        }
+    }
+
     var weatherUiState: WeatherUiState by mutableStateOf(WeatherUiState.Loading)
         private set
 
@@ -38,33 +56,8 @@ class WeatherViewModel : ViewModel() {
         viewModelScope.launch {
             weatherUiState =
             try {
-                val result = WeatherApi.retrofitService.getWeather(city = city)
                 WeatherUiState.Success(
-                    WeatherMapped(
-                        city = city,
-                        currentDayInfo = CurrentDayInfo(
-                            currentTemp = result.current?.tempC!!.roundToInt().toString() + "℃",
-                            maxTemp = result.forecast?.forecastday[0]?.day?.maxtempC!!.roundToInt().toString() + "℃",
-                            minTemp = result.forecast?.forecastday[0]?.day?.mintempC!!.roundToInt().toString() + "℃",
-                            feelsLike = result.current?.feelslikeC!!.roundToInt().toString() + "℃",
-                            icon = result.forecast?.forecastday[0]?.day?.condition?.icon!!
-                        ),
-                        hourly = result.forecast?.forecastday[0]?.hour!!.map { hour ->
-                            HourInfo(
-                                temp = round(hour.tempC!!).roundToInt().toString() + "℃",
-                                time = hour.time!!.split(" ")[1],
-                                icon = hour.condition?.icon.toString()
-                            )
-                        },
-                        futureDaysTemps = result.forecast?.forecastday!!.map { forecastDay ->
-                            FutureDayTemps(
-                                date = forecastDay.date!!.split("-").takeLast(2).reversed().joinToString("."),
-                                maxTemp =  round(forecastDay.day?.mintempC!!).roundToInt().toString() + "℃",
-                                minTemp =  round(forecastDay.day?.maxtempC!!).roundToInt().toString() + "℃",
-                                icon = forecastDay.day?.condition?.icon!!
-                            )
-                        }
-                    )
+                    weatherRepository.getWeather(city = city)
                 )
             } catch (e: IOException) {
                 WeatherUiState.Error
