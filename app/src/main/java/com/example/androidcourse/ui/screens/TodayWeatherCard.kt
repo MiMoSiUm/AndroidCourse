@@ -8,21 +8,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.example.androidcourse.R
 import com.example.androidcourse.data.CurrentDayInfo
 
 @Composable
@@ -57,16 +56,15 @@ fun TodayWeatherCard(
                         contentDescription = "Weather Icon",
                         modifier = Modifier
                             .size(40.dp)
-//                            .wrapContentHeight(Alignment.CenterVertically)
                     )
-                    Text(
-                        text = currentDayInfo.currentTemp,
-                        fontSize = 40.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .wrapContentHeight(Alignment.CenterVertically)
-                    )
+                    currentDayInfo.currentTemp?.let {
+                        Text(
+                            text = currentDayInfo.currentTemp,
+                            fontSize = 40.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                        )
+                    }
                 }
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -76,13 +74,13 @@ fun TodayWeatherCard(
                         .padding(end = 10.dp)
                 ) {
                     Text(
-                        text = "Ощущается как " + currentDayInfo.feelsLike
+                        text = stringResource(R.string.feels_like) + " " + currentDayInfo.feelsLike
                     )
                     Text(
-                        text = "Максимум " + currentDayInfo.maxTemp
+                        text = stringResource(R.string.maximum) + " " + currentDayInfo.maxTemp
                     )
                     Text(
-                        text = "Минимум " + currentDayInfo.minTemp
+                        text = stringResource(R.string.minimum) + " " + currentDayInfo.minTemp
                     )
                 }
             }
